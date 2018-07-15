@@ -1,0 +1,7 @@
+{
+  "email": "email",
+  "ORIGIN": "starting location lat and long or name keyword",
+  "DESTINATION": "starting location lat and long or name keyword",
+  "THINGS_TO_AVOID": "avoid=tolls|highways|ferries",
+  "DEPARTURE_TIME": "now or anytime"
+}
