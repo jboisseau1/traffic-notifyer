@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node_modules/.bin/pm2 start app.js",
+    "stop": "node_modules/.bin/pm2 delete app"
   },
   "dependencies": {
     "dotenv": "^6.0.0",
