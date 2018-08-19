@@ -1,10 +1,11 @@
 const express = require('express');
 const app = express();
 const request = require('request');
+const moment = require('moment');
 require('dotenv').config({ silent: true });
 const pb = require('./PushBullet.js').PushBullet;
 const CONFIG = require('./config.json');
-
+const email = require('./email.js').email;
 const AppPort = process.env.PORT;
 const GMAPS_APIKEY = process.env.GMAPS_APIKEY;
 
@@ -30,14 +31,21 @@ It should take you ${jsonObj.routes[0].legs[0].duration.text}.
 
 Link: ${NAV_LINK}`;
         console.log('Request received sending this update: ', resInfo);
-
-        pb.push(
-          'note',
-          CONFIG.DEVID,
-          CONFIG.EMAIL,
-          { title: 'Traffic Update', body: resInfo },
-          undefined
-        );
+        if (process.env.PUSHBULLET_API_KEY) {
+          pb.push(
+            'note',
+            CONFIG.DEVID,
+            CONFIG.EMAIL,
+            { title: 'Traffic Update', body: resInfo },
+            undefined
+          );
+        } else if (process.env.ROBOT_EMAIL && process.env.ROBOT_PASS) {
+          email(
+            process.env.TO_EMAIL,
+            `Traffic for ${moment().format('MM/DD/YYYY')}`,
+            resInfo
+          );
+        }
         res.sendStatus(200);
       } else {
         let jsonObj = JSON.parse(err);
